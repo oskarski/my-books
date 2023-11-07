@@ -10,6 +10,8 @@ const books = apiBooks.map(apiBook => ({
 const renderBookList = (booksToRender) => {
     const $booksList = document.getElementById('books-list');
 
+    $booksList.innerHTML = '';
+
     booksToRender.forEach(book => {
         $booksList.innerHTML += `
             <li>
@@ -19,5 +21,23 @@ const renderBookList = (booksToRender) => {
         `;
     });
 }
+
+document.getElementById('search-form').addEventListener('submit', e => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+
+    const phrase = formData.get('phrase');
+
+    if (!phrase) {
+        // alert('Fraza nie moze byc pusta!');
+        renderBookList(books);
+        return;
+    }
+
+    const foundBooks = books.filter(book => book.name.toLowerCase().includes(phrase.toLowerCase()));
+
+    renderBookList(foundBooks);
+});
 
 renderBookList(books);
